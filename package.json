@@ -1,0 +1,10 @@
+{
+  "name": "missing-feature",
+  "version": "0.1.0",
+  "description": "A feature proposal with a clickable prototype: My Garage reads the car from the search query and labels every car part with whether it fits.",
+  "private": true,
+  "scripts": {
+    "serve": "python3 -m http.server 8000"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missing Feature · "My Garage" for car parts search</title>
+<meta name="description" content="A feature proposal with a clickable prototype: a garage that reads the car from the search query and labels every car part with whether it fits.">
+<meta name="theme-color" content="#5e35b1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235e35b1'/%3E%3Cpath d='M7 19l3-7h12l3 7v4H7z' fill='white'/%3E%3Ccircle cx='11' cy='23' r='2.5' fill='%235e35b1'/%3E%3Ccircle cx='21' cy='23' r='2.5' fill='%235e35b1'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,600;7..72,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css?v=1">
+<style>
+:root{--accent:#5e35b1;--soft:#ede7f6;--mk:#ff5a00}
+.intro .kicker{font:600 12.5px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.proto{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
+.phone{width:320px;height:640px;border:10px solid #1f1d1a;border-radius:40px;background:#fff;overflow:hidden;position:relative;margin:0 auto;box-shadow:0 18px 40px rgba(0,0,0,.18)}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;font-size:13px}
+.ab{background:var(--mk);color:#fff;padding:14px 12px 10px;font:600 14px var(--body);display:flex;gap:8px;align-items:center}
+.ab .back{cursor:pointer;font-size:18px;line-height:1}
+.sb{background:#fff;border-radius:8px;color:#222;padding:8px 10px;font:500 13px var(--body);flex:1;display:flex;justify-content:space-between}
+.body{flex:1;overflow:auto;padding:10px 12px;background:#f6f5f3}
+.hot{cursor:pointer;outline:2px dashed transparent;outline-offset:2px;border-radius:10px;transition:outline-color .2s}
+.showhot .hot{outline-color:#7e57c2;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{outline-color:transparent}}
+.sug{background:#fff;border-radius:10px;padding:10px;margin-bottom:8px;display:flex;gap:10px;align-items:center}
+.sug .ic{width:30px;height:30px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-size:16px}
+.chipm{display:inline-flex;gap:5px;align-items:center;background:#e8f5e9;color:#1b5e20;border-radius:999px;padding:4px 9px;font:600 12px var(--body);margin:0 4px 6px 0}
+.chipm.o{background:#fff3e0;color:#8d4b00}
+.item{background:#fff;border-radius:10px;padding:9px;margin-bottom:8px;display:grid;grid-template-columns:52px 1fr;gap:8px}
+.item .img{width:52px;height:52px;border-radius:8px;background:linear-gradient(135deg,#e0dcd4,#f3f1ec)}
+.item b{font-size:13px}
+.price{font:700 15px var(--body);color:#111}
+.fit{display:inline-block;font:600 11px var(--body);border-radius:5px;padding:2px 6px;margin-top:3px}
+.fit.y{background:#e8f5e9;color:#1b5e20}.fit.n{background:#ffebee;color:#b71c1c}.fit.u{background:#fff8e1;color:#8d6e00}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;padding:14px;box-shadow:0 -8px 24px rgba(0,0,0,.15)}
+.opt{border:1px solid #e5e1da;border-radius:10px;padding:9px 10px;margin-top:6px;display:flex;justify-content:space-between}
+.btnm{background:var(--mk);color:#fff;border-radius:10px;padding:11px;text-align:center;font:600 14px var(--body);margin-top:10px}
+.dimm{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.steps{display:grid;gap:8px}
+.steps button{all:unset;display:grid;grid-template-columns:28px 1fr;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:#fff;font-size:14.5px}
+.steps button[aria-current="true"]{border-color:var(--accent);background:var(--soft)}
+.steps i{font-style:normal;font:700 14px var(--body);color:var(--accent)}
+.why{margin-top:12px;font-size:14.5px;background:#fff;border-left:4px solid var(--accent);border-radius:0 12px 12px 0;padding:10px 14px}
+.req td:first-child{white-space:nowrap;font-weight:600}
+.size{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.out{font:700 34px/1 var(--display);color:var(--accent)}
+@media (max-width:900px){.proto,.size{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 10l2-4h8l2 4v3H2z" fill="white"/></svg></i>Missing Feature</a>
+  <nav><a class="hide-sm" href="https://github.com/costasxeras-stack/missing-feature">GitHub</a><a href="https://kostasxeras.com/">Portfolio</a></nav>
+</div></header>
+<div class="tabs" role="tablist" aria-label="Sections"><div class="wrap">
+  <button role="tab" data-view="proto" aria-selected="true">Prototype</button>
+  <button role="tab" data-view="spec" aria-selected="false">Spec</button>
+  <button role="tab" data-view="size" aria-selected="false">Sizing</button>
+  <button role="tab" data-view="launch" aria-selected="false">Launch plan</button>
+</div></div>
+<main class="wrap">
+  <section class="intro">
+    <span class="kicker">Feature proposal · marketplace car parts</span>
+    <h1>My Garage: say the car once, see what fits everywhere.</h1>
+    <p>In <a href="https://kostasxeras.com/second-look/">Second Look</a> I logged how Allegro search handles "klocki hamulcowe golf 7": the car in the query barely changed the results, and no card said whether a part fits. This is the feature I would build next. Click through the prototype, then read the spec, the sizing model and the launch plan.</p>
+  </section>
+
+  <div data-panel="proto">
+    <section class="card">
+      <div class="proto">
+        <div>
+          <div class="phone" id="phone"></div>
+          <div class="row" style="justify-content:center"><label style="display:flex;gap:6px;align-items:center;margin:0;font-weight:500"><input type="checkbox" id="hints" checked> Show tap targets</label><button class="btn small" type="button" id="restart">Restart</button></div>
+        </div>
+        <div>
+          <h2>The flow, in five screens</h2>
+          <p class="sub">Tap inside the phone, or jump to a screen here. Product names are placeholders and fit labels are illustrative, not checked against a parts catalogue.</p>
+          <div class="steps" id="steps"></div>
+          <div class="why" id="why"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div data-panel="spec" hidden>
+    <section class="card">
+      <h2>Problem</h2>
+      <p>Drivers name their car in the search query, but results do not use it. To be sure a part fits, they must fill in a vehicle filter that the query could have filled, or open each listing. Wrong guesses become returns, and doubt becomes abandoned searches.</p>
+      <h2 style="margin-top:16px">Evidence and its limits</h2>
+      <ul class="sub" style="padding-left:20px;display:grid;gap:6px">
+        <li><b>Observed:</b> for "klocki hamulcowe golf 7", 4 of 60 results on page 1 named the Golf 7, no card showed a fit label, and "golf 9" returned more offers than "golf 7" (<a href="https://kostasxeras.com/second-look/">Second Look test log</a>, 21 November 2026).</li>
+        <li><b>Not known:</b> how many searches name a car, how often the vehicle filter is used, and the share of returns for wrong fit. These are [placeholders] in the sizing model.</li>
+      </ul>
+      <h2 style="margin-top:16px">Users</h2>
+      <ul class="sub" style="padding-left:20px;display:grid;gap:6px"><li><b>DIY drivers</b> who buy a part a few times a year and know their car model but not the engine code.</li><li><b>Small garages</b> buying for many cars, who need several vehicles saved.</li></ul>
+      <h2 style="margin-top:16px">Requirements</h2>
+      <div style="overflow-x:auto"><table class="req"><thead><tr><th>ID</th><th>Requirement</th><th>Priority</th></tr></thead><tbody>
+        <tr><td>G1</td><td>Detect make, model and generation in the query (numbers, Roman numerals, "mk7", Polish and English) and show it as a removable chip</td><td>Must</td></tr>
+        <tr><td>G2</td><td>Apply the detected vehicle as a filter that ranks fitting parts first, without hiding parts with no fitment data</td><td>Must</td></tr>
+        <tr><td>G3</td><td>Fit label on every card in car parts categories: fits, fits some engines, does not fit, no fitment data</td><td>Must</td></tr>
+        <tr><td>G4</td><td>Ask only for the missing detail (usually engine) in a bottom sheet, with "skip"</td><td>Must</td></tr>
+        <tr><td>G5</td><td>Save vehicles to My Garage, signed in or on the device, and pick one in one tap</td><td>Should</td></tr>
+        <tr><td>G6</td><td>Promoted listings follow the same fitment ranking rule as organic ones</td><td>Should, needs ads team</td></tr>
+        <tr><td>G7</td><td>Message when a model is not recognised, with the closest match</td><td>Should</td></tr>
+        <tr><td>G8</td><td>Fit check on the offer page before "Add to cart"</td><td>Could</td></tr>
+      </tbody></table></div>
+      <h2 style="margin-top:16px">Edge cases</h2>
+      <ul class="sub" style="padding-left:20px;display:grid;gap:6px"><li>Query names two cars ("golf 7 or octavia 3"): show both chips, ask which one.</li><li>Model names that are also words: detect only in car parts categories.</li><li>Listing with no fitment data: label "no fitment data", never "does not fit".</li><li>Seller fitment data conflicts with the catalogue: trust the catalogue, flag to seller.</li><li>Shopper removes the chip: respect it for the rest of the session.</li></ul>
+      <h2 style="margin-top:16px">Non-goals</h2>
+      <ul class="sub" style="padding-left:20px"><li>Building a fitment catalogue. This uses the vehicle data the filter already relies on.</li><li>Changing ad pricing.</li></ul>
+    </section>
+  </div>
+
+  <div data-panel="size" hidden>
+    <section class="card">
+      <h2>Sizing model</h2>
+      <p class="sub">Every input is a placeholder to replace with real data. The defaults are round example numbers chosen to show how the model works, not estimates of any company's business.</p>
+      <div class="size">
+        <div id="inputs"></div>
+        <div>
+          <div class="stat"><b class="out" id="o-orders">–</b><span>extra orders a month from fewer abandoned searches</span></div>
+          <div class="stat" style="margin-top:10px"><b class="out" id="o-returns">–</b><span>fewer wrong-fit returns a month</span></div>
+          <div class="stat" style="margin-top:10px"><b class="out" id="o-value">–</b><span>monthly value in PLN (margin on extra orders plus return costs avoided)</span></div>
+          <p class="note" id="o-note"></p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div data-panel="launch" hidden>
+    <section class="card">
+      <h2>Launch plan</h2>
+      <ol class="sub" style="padding-left:20px;display:grid;gap:10px">
+        <li><b>Offline check (2 weeks).</b> Run the vehicle parser on a sample of [n] car parts queries. Target: [x]% precision on detected vehicles, measured by hand labelling.</li>
+        <li><b>A/B test G1 to G4 (4 full weeks).</b> Car parts queries that name a model. Primary metric: search to purchase conversion. Guardrails: wrong-fit returns, revenue per search, promoted listing revenue. Sample size from <a href="https://kostasxeras.com/test-plan-studio/">Test Plan Studio</a> once the baseline is known.</li>
+        <li><b>Garage (G5) behind a flag</b> for signed-in users, measured by repeat use of a saved vehicle.</li>
+        <li><b>Ads fitment rule (G6) as its own test,</b> agreed with the ads team, with promoted revenue as the main guardrail.</li>
+      </ol>
+      <h2 style="margin-top:16px">Risks</h2>
+      <div style="overflow-x:auto"><table><thead><tr><th>Risk</th><th>Mitigation</th></tr></thead><tbody>
+        <tr><td>Wrong vehicle detected</td><td>Visible chip, one tap to remove, parser precision gate before launch</td></tr>
+        <tr><td>Sparse fitment data makes many cards say "no fitment data"</td><td>Label honestly, rank them after fitting parts, report coverage to sellers</td></tr>
+        <tr><td>Ad revenue drops when non-fitting ads move down</td><td>Separate test, ads team owns the decision</td></tr>
+        <tr><td>Engine question feels like friction</td><td>Ask only when it changes the result, always allow skip</td></tr>
+      </tbody></table></div>
+      <h2 style="margin-top:16px">Decision I would ask for</h2>
+      <p class="sub">Approve the offline parser check and the A/B test for G1 to G4. Decide on G6 after the first test, with the ads team.</p>
+    </section>
+  </div>
+</main>
+<footer><div class="wrap"><span>Missing Feature v0.1.0 by <a href="https://kostasxeras.com/">Konstantinos Xeras</a>, built with Claude (Anthropic). An independent proposal. Allegro is not involved. <a href="https://github.com/costasxeras-stack/missing-feature">Code and decisions on GitHub</a>.</span></div></footer>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  document.querySelector('.tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view]'); if (!b) return;
+    document.querySelectorAll('.tabs [data-view]').forEach(function (x) { x.setAttribute('aria-selected', x === b); });
+    document.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== b.getAttribute('data-view'); });
+    window.scrollTo({ top: 0 });
+  });
+
+  var engine = null;
+  var ITEMS = function () {
+    return engine ? [['Front brake pads, brand A', 'y', 'Fits your Golf VII 1.4 TSI', '119'], ['Front brake pads, brand B', 'y', 'Fits your Golf VII 1.4 TSI', '134'], ['Front brake pads, brand C', 'y', 'Fits your Golf VII 1.4 TSI', '98'], ['Promoted: pads for an older generation', 'n', 'Does not fit Golf VII', '125']]
+      : [['Front brake pads, brand A', 'u', 'Fits some Golf VII engines', '119'], ['Front brake pads, brand B', 'u', 'Fits some Golf VII engines', '134'], ['Rear brake pads, brand C', 'u', 'Fits some Golf VII engines', '91'], ['Promoted: pads for an older generation', 'n', 'Does not fit Golf VII', '125']];
+  };
+  var S = [
+    { t: 'Type the query', why: 'The vehicle is detected while typing (G1). One tap applies it, so the shopper never has to find the vehicle filter.', html: function () { return '<div class="ab"><span class="sb">klocki hamulcowe golf 7<span>⌕</span></span></div><div class="body"><div class="sug hot" data-go="1"><span class="ic">🚗</span><div><b>Volkswagen Golf VII</b><br><span style="color:#777">Detected in your search. Tap to use it</span></div></div><div class="sug"><span class="ic">⌕</span><div>klocki hamulcowe golf 7 przód</div></div><div class="sug"><span class="ic">⌕</span><div>klocki hamulcowe golf 7 tył</div></div></div>'; } },
+    { t: 'Results with fit labels', why: 'Every card says whether it fits (G3). Parts that do not fit move down, including promoted ones (G6). The engine is the only thing left to ask.', html: function () { return '<div class="ab"><span class="back" data-go="0">‹</span><span class="sb">klocki hamulcowe golf 7<span>⌕</span></span></div><div class="body"><span class="chipm">✓ Golf VII ✕</span>' + (engine ? '<span class="chipm">✓ ' + engine + ' ✕</span>' : '<span class="chipm o hot" data-go="2">+ Add engine for exact fit</span>') + ITEMS().map(function (i, n) { return '<div class="item' + (n === 0 ? ' hot' : '') + '"' + (n === 0 ? ' data-go="3"' : '') + ' style="' + (i[1] === 'n' ? 'opacity:.5' : '') + '"><span class="img"></span><div><b>' + i[0] + '</b><div class="price">' + i[3] + ' PLN</div><span class="fit ' + i[1] + '">' + i[2] + '</span></div></div>'; }).join('') + '</div>'; } },
+    { t: 'Ask only for the engine', why: 'The query gave make, model and generation. The sheet asks only for what is missing (G4), and can be skipped.', html: function () { return S[1].html() + '<div class="dimm"></div><div class="sheet"><b style="font-size:15px">Which engine?</b><div style="color:#777;margin-top:2px">Golf VII · so we can show exact fit</div>' + ['1.0 TSI', '1.2 TSI', '1.4 TSI', '1.6 TDI', '2.0 TDI'].map(function (e) { return '<div class="opt' + (e === '1.4 TSI' ? ' hot' : '') + '" data-eng="' + e + '"><span>' + e + '</span><span>›</span></div>'; }).join('') + '<div style="text-align:center;margin-top:10px;color:#777" data-go="1" class="hot2">Skip</div></div>'; } },
+    { t: 'Offer page fit check', why: 'The fit check repeats before "Add to cart" (G8), so the last doubt is answered where the decision is made.', html: function () { var f = engine ? ['y', '✓ Fits your Golf VII ' + engine] : ['u', 'Fits some Golf VII engines. Add engine']; return '<div class="ab"><span class="back" data-go="1">‹</span><span>Offer</span></div><div class="body"><div style="height:150px;border-radius:12px;background:linear-gradient(135deg,#e0dcd4,#f3f1ec)"></div><b style="display:block;margin-top:10px;font-size:15px">Front brake pads, brand A</b><div class="price" style="font-size:20px;margin-top:4px">119 PLN</div><div style="background:' + (engine ? '#e8f5e9' : '#fff8e1') + ';border-radius:10px;padding:10px;margin-top:10px"><span class="fit ' + f[0] + '" style="font-size:12.5px">' + f[1] + '</span><div style="color:#555;margin-top:4px">Based on the vehicle catalogue, not the listing title.</div></div><div class="btnm">Add to cart</div><div class="hot" data-go="4" style="text-align:center;margin-top:10px;color:#5e35b1;font-weight:600">Save this car to My Garage</div></div>'; } },
+    { t: 'My Garage', why: 'Saved vehicles make the next search one tap (G5). Garages can keep several cars.', html: function () { return '<div class="ab"><span class="back" data-go="3">‹</span><span>My Garage</span></div><div class="body"><div class="item" style="grid-template-columns:40px 1fr"><span class="ic" style="width:40px;height:40px;border-radius:10px;background:#ede7f6;display:grid;place-items:center;font-size:20px">🚗</span><div><b>Volkswagen Golf VII ' + (engine || '') + '</b><br><span style="color:#2e7d32;font-weight:600">Active for car parts searches</span></div></div><div class="item" style="grid-template-columns:40px 1fr;opacity:.7"><span style="width:40px;height:40px;border-radius:10px;background:#f3f1ec;display:grid;place-items:center;font-size:20px">＋</span><div><b>Add another car</b><br><span style="color:#777">By model, registration certificate or VIN</span></div></div><div class="btnm hot" data-go="0">Search parts for this car</div></div>'; } }
+  ];
+  var cur = 0;
+  function go(i) {
+    cur = i; $('phone').innerHTML = '<div class="scr">' + S[i].html() + '</div>';
+    $('steps').innerHTML = S.map(function (s, n) { return '<button type="button" data-step="' + n + '" aria-current="' + (n === i) + '"><i>' + (n + 1) + '</i><span>' + s.t + '</span></button>'; }).join('');
+    $('why').innerHTML = '<b>Screen ' + (i + 1) + ':</b> ' + S[i].why;
+  }
+  $('phone').addEventListener('click', function (e) {
+    var en = e.target.closest('[data-eng]'); if (en) { engine = en.getAttribute('data-eng'); go(1); return; }
+    var g = e.target.closest('[data-go]'); if (g) go(+g.getAttribute('data-go'));
+  });
+  $('steps').addEventListener('click', function (e) { var b = e.target.closest('[data-step]'); if (b) go(+b.getAttribute('data-step')); });
+  $('hints').addEventListener('change', function () { $('phone').classList.toggle('showhot', this.checked); });
+  $('restart').addEventListener('click', function () { engine = null; go(0); });
+  $('phone').classList.add('showhot'); go(0);
+
+  // sizing
+  var IN = [['q', 'Car parts searches a month that name a car', 1000000, 1000], ['ab', 'Share of those searches that end without a purchase', 70, 1], ['rec', 'Share of abandoned searches the feature recovers', 2, 0.1], ['cv', 'Orders per recovered search', 1, 0.1], ['ord', 'Car parts orders a month from those searches', 300000, 1000], ['wf', 'Share of those orders returned as wrong fit', 3, 0.1], ['cut', 'Cut in wrong-fit returns from fit labels', 30, 1], ['mar', 'Margin per order (PLN)', 8, 0.5], ['rc', 'Cost of one return (PLN)', 25, 1]];
+  $('inputs').innerHTML = IN.map(function (x) { return '<label for="i-' + x[0] + '">' + x[1] + (/Share|Cut/.test(x[1]) ? ' (%)' : '') + '</label><input type="number" id="i-' + x[0] + '" value="' + x[2] + '" step="' + x[3] + '" min="0">'; }).join('');
+  function size() {
+    var v = {}; IN.forEach(function (x) { v[x[0]] = Math.max(0, +$('i-' + x[0]).value || 0); });
+    var extra = v.q * v.ab / 100 * v.rec / 100 * v.cv, ret = v.ord * v.wf / 100 * v.cut / 100, val = extra * v.mar + ret * v.rc;
+    $('o-orders').textContent = Math.round(extra).toLocaleString('en-US'); $('o-returns').textContent = Math.round(ret).toLocaleString('en-US'); $('o-value').textContent = Math.round(val).toLocaleString('en-US');
+    $('o-note').textContent = 'Example inputs, not real data. The biggest unknown is the recovery rate: with these inputs, each 1 point of recovery is worth ' + Math.round(v.q * v.ab / 100 * 0.01 * v.cv * v.mar).toLocaleString('en-US') + ' PLN a month. Measure it in the A/B test before trusting this model.';
+  }
+  $('inputs').addEventListener('input', size); size();
+})();
+</script>
+</body>
+</html>
