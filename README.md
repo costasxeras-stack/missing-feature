@@ -52,9 +52,9 @@ No usage data yet. These are the measures I would track, with targets to set aft
 2. Write the vehicle parser and measure precision on [n] real queries
 3. Add the ads team's view to the launch plan
 
-## How it was built
+## My role
 
-I framed the problem, made the product calls and wrote the conclusions. Claude (Anthropic) was my engineering partner for the code. 
+I framed the problem, made the product calls and wrote the conclusions. 
 
 ## Run it yourself
 
